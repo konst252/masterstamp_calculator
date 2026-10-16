@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#0b1730">
+<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>МастерШтамп — калькулятор цены резиновых клише</title>
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<style>
+:root{--bg:#eef2ff;--card:#fff;--ink:#182230;--muted:#64748b;--line:#d8e0f0;--accent:#4f46e5;--good:#147d45;--warn:#a15c00;--bad:#b42318;--purple:#4f46e5;--teal:#0f766e;--orange:#c2410c;--blue:#1d4ed8}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#eef2ff 0%,#f8fafc 48%,#ecfeff 100%);color:var(--ink);font:15px/1.45 "Segoe UI",Arial,sans-serif}
+main{max-width:1180px;margin:0 auto;padding:24px 16px 40px}
+header{margin-bottom:18px;padding:22px 24px;border-radius:18px;background:linear-gradient(115deg,#312e81,#4f46e5 58%,#0891b2);color:#fff;box-shadow:0 12px 30px #312e8130}header .sub{color:#e0e7ff;max-width:850px}h1{font-size:28px;margin:0 0 5px}h2{font-size:18px;margin:0 0 14px}h3{font-size:15px;margin:16px 0 8px}
+.sub{color:var(--muted);max-width:850px}.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:14px}.card{background:var(--card);border:1px solid #dbe3f0;border-radius:16px;padding:17px;box-shadow:0 5px 18px #172b4d0b}.span-7{grid-column:span 7}.span-5{grid-column:span 5}.span-12{grid-column:span 12}
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field label{display:block;color:#475569;font-size:13px;margin-bottom:5px}.field input,.field select{width:100%;min-height:41px;border:1px solid #d4a72c;border-radius:8px;padding:8px 10px;font:inherit;background:#fff9c4;color:#172033;box-shadow:inset 0 1px 2px #854d0e0d}.field input:focus,.field select:focus{outline:2px solid #eab308;border-color:#a16207;background:#fffde7}.field input[readonly]{background:#e8edf4;border-color:#cbd5e1;color:#475569}.field div>button{flex-shrink:0;padding:8px 12px}.field small{display:block;color:var(--muted);font-size:11px;margin-top:4px}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.stat{background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:12px}.stat .k{font-size:12px;color:var(--muted)}.stat .v{font-size:22px;font-weight:750;margin-top:4px;overflow-wrap:anywhere}.hero-results{grid-column:span 12;background:linear-gradient(135deg,#111827,#1e3a8a 60%,#0f766e);color:#fff;border:0;padding:18px}.hero-results h2{color:#fff;margin-bottom:12px}.hero-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.hero-top .hero-stat .v{font-size:clamp(25px,2.8vw,36px)}.hero-bottom .hero-stat{padding:11px;background:#ffffff14}.hero-bottom .hero-stat .v{font-size:clamp(19px,2vw,25px)}.hero-stat.profit{background:linear-gradient(135deg,#166534,#15803d);border-color:#86efac}.hero-meta{display:flex;gap:20px;flex-wrap:wrap;color:#e0e7ff;font-size:13px;margin-top:12px}.hero-meta b{color:#fff;font-size:15px}.hero-stat{border:1px solid #ffffff28;border-radius:13px;padding:14px;background:#ffffff12;min-width:0}.hero-stat .k{font-size:12px;color:#dbeafe}.hero-stat .v{font-size:clamp(22px,2.4vw,32px);font-weight:800;line-height:1.15;margin-top:8px;overflow-wrap:anywhere}.hero-stat .note{font-size:12px;color:#cbd5e1;margin-top:6px}.hero-stat.total{background:linear-gradient(135deg,#4f46e5,#2563eb);border-color:#a5b4fc}.hero-stat.cost{background:linear-gradient(135deg,#0f766e,#047857)}.hero-stat.unit{background:linear-gradient(135deg,#7c2d12,#c2410c)}.stat .note{font-size:12px;color:var(--muted);margin-top:3px}
+.status{padding:14px 16px;border-radius:10px;background:#ffffff;border:2px solid #64748b;margin-top:12px;color:#172033;font-weight:700;box-shadow:0 2px 8px #00000012}.status.good{background:#dcfce7;border-color:#15803d;color:#14532d}.status.warn{background:#fef3c7;border-color:#d97706;color:#78350f}.status.bad{background:#fee2e2;border-color:#b91c1c;color:#7f1d1d}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:9px 7px;border-bottom:1px solid var(--line)}th{color:var(--muted);font-weight:600}td:last-child,th:last-child{text-align:right}.pill{display:inline-block;border-radius:999px;background:#eef2ff;color:#3730a3;padding:3px 8px;font-size:12px}.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}button{border:0;border-radius:9px;padding:10px 14px;font:inherit;cursor:pointer}.primary{background:var(--accent);color:white}.secondary{background:#e8edf4;color:#233044}.tiny{font-size:12px;color:var(--muted)}details{border:1px solid var(--line);border-radius:10px;background:#fbfcff;margin-top:10px}details summary{cursor:pointer;padding:11px 13px;font-weight:650;color:#334155;list-style:none}details summary::-webkit-details-marker{display:none}details summary:after{content:"＋";float:right;color:var(--accent);font-weight:800}details[open] summary:after{content:"−"}details .details-body{padding:0 13px 13px}details summary:hover{color:var(--accent)}.price-table input{width:82px;padding:6px;border:1px solid var(--line);border-radius:6px}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}.muted{color:var(--muted)}.right{text-align:right}.nowrap{white-space:nowrap}
+@media(max-width:800px){.span-7,.span-5{grid-column:span 12}.fields,.two-col{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.hero-grid{grid-template-columns:repeat(2,minmax(0,1fr))}h1{font-size:23px}header{padding:18px}}@media(max-width:520px){.hero-grid{grid-template-columns:1fr}.hero-stat .v{font-size:24px}.hero-results{padding:13px}}
+
+.field.key-input {background:#fff4c2;border:2px solid #e4a000;border-radius:12px;padding:9px;box-shadow:0 0 0 2px rgba(228,160,0,.10)}
+.field.key-input label {font-weight:750;color:#674500}
+.field.key-input input {background:#fffdf3;border:1px solid #d28a00;font-weight:700;font-size:18px;min-height:48px}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>МастерШтамп — калькулятор резиновых клише</h1>
+  <div class="sub">Розничная цена + скидка за количество + контроль себестоимости и маржи. Работает локально в браузере; настройки сохраняются на этом устройстве.</div>
+</header>
+<div class="grid">
+<section class="card hero-results">
+<h2>Главное по заказу</h2>
+<div class="hero-grid hero-top">
+ <div class="hero-stat unit"><div class="k">ЦЕНА ЗА 1 ШТ. — КЛИШЕ + ОСНАСТКА</div><div class="v" id="heroUnitPrice">—</div><div class="note" id="heroDiscount">Цена клише после скидки + оснастка</div></div>
+ <div class="hero-stat total"><div class="k">ОБЩАЯ СТОИМОСТЬ ЗАКАЗА</div><div class="v" id="heroOrderTotal">—</div><div class="note">Клише + оснастка за весь заказ</div></div>
+ <div class="hero-stat profit"><div class="k">ЧИСТАЯ ПРИБЫЛЬ</div><div class="v" id="heroProfit">—</div><div class="note">После прямых и накладных расходов</div></div>
+</div>
+<div class="hero-grid hero-bottom" style="margin-top:10px">
+ <div class="hero-stat cost"><div class="k">СЕБЕСТОИМОСТЬ 1 ШТ. — КЛИШЕ + ОСНАСТКА</div><div class="v" id="heroUnitCost">—</div><div class="note">Прямые затраты на единицу</div></div>
+ <div class="hero-stat"><div class="k">СЕБЕСТОИМОСТЬ ВСЕГО ЗАКАЗА</div><div class="v" id="heroTotalCost">—</div><div class="note">Клише + оснастка</div></div>
+ <div class="hero-stat"><div class="k">СТОИМОСТЬ 1 СМ²</div><div class="v" id="heroCm2Cost">—</div><div class="note">Себестоимость клише на 1 см²</div></div>
+</div>
+<div class="hero-meta"><span>Маржа заказа: <b id="heroMargin">—</b></span><span>Скидка: <b id="heroDiscountPct">—</b></span></div>
+<div id="warning" class="status">Заполните параметры заказа — калькулятор проверит экономику.</div>
+</section>
+<section class="card span-7">
+<h2>1. Параметры заказа</h2>
+<div class="fields">
+ <div class="field key-input"><label for="w">Ширина клише, мм</label><input id="w" type="number" min="1" max="210" value="20"></div>
+ <div class="field key-input"><label for="h">Высота клише, мм</label><input id="h" type="number" min="1" max="297" value="20"></div>
+ <div class="field key-input"><label for="qty">Количество клише, шт.</label><input id="qty" type="number" min="1" value="10"></div>
+ <div class="field"><label for="designs">Количество уникальных макетов</label><input id="designs" type="number" min="1" value="1"></div>
+ <div class="field"><label for="complexity">Сложность макета</label><select id="complexity"><option value="1">Простая — ×1,00</option><option value="1.15">Средняя — ×1,15</option><option value="1.3">Высокая — ×1,30</option></select></div>
+ <div class="field key-input"><label for="mountCost">Закупочная цена оснастки за 1 шт., ₽</label><input id="mountCost" type="number" min="0" step="1" value="0"></div>
+ <div class="field"><label for="mountMarkup">Наценка на оснастку, %</label><input id="mountMarkup" type="number" min="0" max="500" step="5" value="100"></div>
+ <div class="field"><label for="mountMinimum">Минимальная розничная цена оснастки, ₽</label><input id="mountMinimum" type="number" min="0" step="5" value="100"></div>
+ <div class="field"><label for="mountSale">Розничная цена оснастки, ₽</label><input id="mountSale" type="number" min="0" step="5" value="0" readonly></div>
+ <div class="tiny" style="grid-column:1/-1">Розничная цена рассчитывается из закупочной цены с учётом наценки и минимальной цены, затем округляется до 5 ₽.</div>
+ <div class="field"><label for="sheetPrice">Цена листа резины A4, ₽</label><input id="sheetPrice" type="number" min="0" step="1" value="800"></div>
+ <div class="field"><label for="gap">Зазор между клише, мм</label><input id="gap" type="number" min="0" max="20" step="0.5" value="2"></div>
+  <div class="field"><label for="edgeMargin">Поле от края листа, мм</label><input id="edgeMargin" type="number" min="0" max="30" step="0.5" value="5"></div>
+</div>
+<details><summary>Раскладка на листе A4 — 210 × 297 мм</summary><div class="details-body">
+<div class="stats">
+ <div class="stat"><div class="k">Оптимальная ориентация</div><div class="v" id="orientation">20 × 20 мм</div><div class="note" id="gridDesc">9 в ряд × 13 рядов</div></div>
+ <div class="stat"><div class="k">Вместимость листа</div><div class="v" id="capacity">117 шт.</div><div class="note" id="sheets">Для заказа: 1 лист</div></div>
+  <div class="stat"><div class="k">Коэффициент расхода K</div><div class="v" id="layoutFactor">—</div><div class="note" id="layoutFactorNote">K = 100% / занятая площадь</div></div>
+  <div class="stat"><div class="k">Надбавка к чистой стоимости</div><div class="v" id="lossImpact">—</div><div class="note">Влияние коэффициента на материал</div></div>
+</div>
+<div class="tiny" style="margin-top:9px">Раскладка рассчитывается для серии одинаковых клише прямоугольной габаритной формы. Поля и зазоры влияют на процент занятой площади. В этой модели вся незанятая площадь считается невозвратными потерями. Для круглых и других фигур вводите максимальные габаритные ширину и высоту.</div></div></details>
+</section>
+<section class="card span-5">
+<h2>2. Розничная цена</h2>
+<div class="field"><label for="pricingMode">Как формировать цену</label><select id="pricingMode"><option value="market">По розничному прайсу</option><option value="markup">По наценке на себестоимость</option><option value="profit">По желаемой прибыли с 1 шт.</option></select></div>
+<div class="field"><label for="markupPct">Наценка на себестоимость, %</label><input id="markupPct" type="number" min="0" max="1000" step="5" value="150"></div>
+<div class="field"><label for="desiredProfit">Желаемая прибыль с 1 шт., ₽</label><input id="desiredProfit" type="number" min="0" step="5" value="200"></div>
+<div class="field"><label for="priceAdjustment">Добавить/убавить к цене клише, ₽</label><input id="priceAdjustment" type="number" step="5" value="0"><small>Плюс повышает цену, минус снижает. Можно использовать для отдельного заказа.</small></div>
+<div class="field"><label for="manualPrice">Ручная цена клише до скидки, ₽</label><div style="display:flex;gap:7px"><input id="manualPrice" type="number" min="0" step="5" placeholder="Оставить пустым для автоматики"><button type="button" class="secondary" id="autoPrice" title="Вернуть автоматический расчёт">Авто</button></div><small id="priceMode">Ручная цена имеет приоритет. Кнопка «Авто» очищает поле.</small></div>
+<details><summary>Показать скидочные матрицы</summary><div class="details-body"><h3>Скидка за количество</h3><table><thead><tr><th>Количество клише</th><th>Скидка</th></tr></thead><tbody id="discountTable"></tbody></table><h3>Дополнительная скидка за общую площадь заказа</h3><table><thead><tr><th>Общая площадь клише</th><th>Скидка</th></tr></thead><tbody id="areaDiscountTable"></tbody></table><p class="tiny">Общая площадь = площадь одного клише × количество. Скидки объединяются последовательно, а не складываются напрямую. Итоговая скидка дополнительно ограничивается защитой маржи.</p></div></details>
+</section>
+<section class="card span-12">
+<h2>Подробности расчёта</h2>
+<details>
+ <summary>Состав цены и скидки</summary>
+ <div class="details-body">
+  <div class="stats">
+   <div class="stat"><div class="k">Расчётная цена за 1 шт. до скидки</div><div class="v" id="unitPrice">350 ₽</div><div class="note" id="priceTier">Плавный расчёт по площади</div></div>
+   <div class="stat"><div class="k">Итоговая скидка по заказу</div><div class="v" id="discount">—</div><div class="note" id="discountReason">С учётом количества, площади и защиты маржи</div></div>
+   <div class="stat"><div class="k">Скидка за количество</div><div class="v" id="qtyDiscount">—</div><div class="note" id="qtyDiscountReason">По матрице количества</div></div>
+   <div class="stat"><div class="k">Скидка за общую площадь</div><div class="v" id="areaDiscount">—</div><div class="note" id="areaDiscountReason">По общей площади заказа</div></div>
+   <div class="stat"><div class="k">Сумма клише до скидки</div><div class="v" id="gross">—</div></div>
+   <div class="stat"><div class="k">Сумма скидки</div><div class="v" id="discountAmount">—</div></div>
+   <div class="stat"><div class="k">К оплате за клише</div><div class="v" id="revenue">—</div></div>
+   <div class="stat"><div class="k">Оснастка отдельно (к оплате)</div><div class="v" id="mountTotal">—</div></div>
+   <div class="stat"><div class="k">Прямая себестоимость всего заказа</div><div class="v" id="cost">—</div><div class="note" id="costBreakdown"></div></div>
+   <div class="stat"><div class="k">Минимальная цена готового штампа за 1 шт. для целевой маржи</div><div class="v" id="minUnit">—</div><div class="note">Клише + оснастка; зависит от целевой маржи.</div></div>
+  </div>
+ </div>
+</details>
+<details>
+ <summary>Как рассчитаны себестоимость, прибыль и маржа</summary>
+ <div class="details-body">
+  <p class="tiny">Стоимость материала рассчитывается по чистой площади клише и коэффициенту расхода K = 100 / процент занятой площади полной раскладки. В рамках выбранной модели вся незанятая площадь считается невозвратными потерями. Дополнительно учитываются лазерная обработка (2 ₽/клише), подготовка уникального макета (50 ₽/макет) и накладные расходы (6% от выручки). Оснастка учитывается отдельно. Ставки нужно сверять с фактическими расходами.</p>
+  <p class="tiny">Маржа заказа = (общая выручка − себестоимость − накладные расходы) / общая выручка. Целевая маржа ограничивает максимальную скидку по всему заказу, включая оснастку. Если скидка по матрице и так меньше допустимой, изменение целевой маржи может не менять текущую цену — но меняет минимальную цену готового штампа для достижения цели.</p>
+ </div>
+</details>
+</section>
+<section class="card span-12">
+<h2>4. Настройки прайса и себестоимости</h2>
+<div class="two-col">
+<div>
+<h3>Плавное формирование розничной цены</h3>
+<div class="stats">
+ <div class="stat"><div class="k">Минимальная цена клише</div><div class="v">350 ₽</div><div class="note">При площади до 4 см²</div></div>
+ <div class="stat"><div class="k">Контрольная цена</div><div class="v">1100 ₽</div><div class="note">При площади 70 см²</div></div>
+</div>
+<p class="tiny" style="margin-top:10px">Цена плавно растёт с площадью, без скачков между размерными категориями. Расчёт округляется вверх до ближайших 25 ₽. Для крупных клише сохраняется проверка себестоимости и целевой маржи.</p>
+<details><summary>Принцип расчёта</summary><div class="details-body"><p class="tiny">До 4 см² действует минимальная цена 350 ₽. При площади 70 см² цена достигает 1100 ₽. Между этими точками и выше них используется плавная степенная кривая.</p></div></details>
+</div>
+<div>
+<h3>Дополнительные затраты</h3>
+<div class="fields">
+ <div class="field"><label for="extraCostCm2">Дополнительные затраты на 1 см² клише, ₽</label><input id="extraCostCm2" type="number" min="0" step="0.1" value="0"><small>Укажите добавку к материалу на каждый см². Например, сюда можно включить условные расходы на обработку. При 0 ₽ учитывается только материал.</small></div>
+ <div class="field"><label for="targetMargin">Целевая маржа, %</label><input id="targetMargin" type="number" min="0" max="90" step="1" value="40"></div>
+  <div class="field"><label>Коэффициент расхода материала</label><input id="lossFactorDisplay" type="text" readonly value="—"><small>Рассчитывается автоматически по проценту занятой площади листа.</small></div>
+ <div class="tiny" style="grid-column:1/-1">Стоимость материала рассчитывается по площади клише, умноженной на коэффициент расхода K = 100 / процент занятой площади листа. Например, при занятости 80% K=1,25, то есть надбавка к чистой стоимости материала составляет 25%. Зазор и поля влияют на раскладку, процент занятости и себестоимость.</div>
+</div>
+<div class="btns"><button class="primary" id="save">Сохранить настройки</button><button class="secondary" id="reset">Сбросить настройки</button><button class="secondary" id="print">Печать расчёта</button></div>
+<div class="tiny" id="saveState" style="margin-top:8px">Настройки применяются сразу; кнопка сохранения фиксирует их в браузере.</div>
+</div>
+</div>
+</section>
+<section class="card span-12">
+<h2>Как читать результат</h2>
+<ul>
+<li><b>Формирование цены</b> — можно выбрать рыночный прайс, наценку на себестоимость или желаемую прибыль с одного штампа. Дополнительно можно задать корректировку в рублях или ввести ручную цену.</li>
+<li><b>Цена по прайсу</b> — розничная цена изделия, а не цена квадратного сантиметра.</li>
+<li><b>Себестоимость материала</b> — доля стоимости листа A4 на одно клише по расчётной вместимости листа с учётом зазоров и полей. Предполагается повторное использование пригодных обрезков.</li>
+<li><b>Маржа заказа</b> — (выручка клише и оснастки − прямая себестоимость клише и оснастки − накладные расходы) / общая выручка.</li>
+<li><b>Защита от убыточной скидки</b> — если скидка по матрице снижает маржу ниже целевой, калькулятор автоматически уменьшает скидку до допустимого уровня. Если даже без скидки цена недостаточна, он покажет предупреждение.</li>
+</ul>
+<details><summary>Примечание о точности расчёта</summary><div class="details-body"><p class="tiny">Это управленческий расчёт, а не бухгалтерский учёт. Единую сумму теоретических затрат нужно периодически сверять с фактическими расходами и временем производства.</p></div></details>
+</section>
+</div>
+</main>
+<script>
+const defaults = {
+ discounts:[{min:1,max:1,pct:0,label:"1 шт."},{min:2,max:4,pct:3,label:"2–4 шт."},{min:5,max:9,pct:7,label:"5–9 шт."},{min:10,max:19,pct:12,label:"10–19 шт."},{min:20,max:49,pct:18,label:"20–49 шт."},{min:50,max:99,pct:22,label:"50–99 шт."},{min:100,max:Infinity,pct:25,label:"100+ шт."}],
+ areaDiscounts:[{min:0,max:100,pct:0,label:"Менее 100 см²"},{min:100,max:300,pct:1,label:"100–299 см²"},{min:300,max:700,pct:2,label:"300–699 см²"},{min:700,max:1500,pct:3,label:"700–1499 см²"},{min:1500,max:Infinity,pct:4,label:"1500 см² и более"}]
+};
+const $=id=>document.getElementById(id);
+const num=id=>Math.max(0,Number($(id).value)||0);
+const round5=n=>Math.round((Number(n)||0)/5)*5;
+const rub=n=>new Intl.NumberFormat('ru-RU',{style:'currency',currency:'RUB',maximumFractionDigits:2}).format(Number.isFinite(n)?n:0);
+const pct=n=>(n*100).toLocaleString('ru-RU',{maximumFractionDigits:1})+'%';
+function renderTables(){
+ $('discountTable').innerHTML=defaults.discounts.map(d=>`<tr><td>${d.label}</td><td>${d.pct}%</td></tr>`).join('');
+ $('areaDiscountTable').innerHTML=defaults.areaDiscounts.map(d=>`<tr><td>${d.label}</td><td>${d.pct}%</td></tr>`).join('');
+}
+function getAreaDiscount(totalArea){
+ const tier=defaults.areaDiscounts.find(d=>totalArea<d.max) || defaults.areaDiscounts[defaults.areaDiscounts.length-1];
+ return tier;
+}
+function getTier(w,h){
+ const area=Math.max(0,w*h/100);
+ // Плавная кривая: 350 ₽ при 4 см², 1100 ₽ при 70 см².
+ const baseArea=4, anchorArea=70, minPrice=350, anchorPrice=1100, exponent=0.75;
+ let price;
+ if(area<=baseArea) price=minPrice;
+ else price=minPrice+(anchorPrice-minPrice)*Math.pow((area-baseArea)/(anchorArea-baseArea),exponent);
+ price=Math.ceil(price/25)*25;
+ return {w,h,label:`Плавная цена по площади ${area.toLocaleString('ru-RU',{maximumFractionDigits:2})} см²`,price};
+}
+function layout(w,h,gap,qty,edgeMargin){
+ const W=210-2*edgeMargin,H=297-2*edgeMargin;
+ if(w<=0||h<=0||W<=0||H<=0)return null;
+ const opts=[];
+ for(const [a,b,rot] of [[w,h,false],[h,w,true]]){
+  const cols=Math.floor((W+gap)/(a+gap));
+  const rows=Math.floor((H+gap)/(b+gap));
+  if(cols>0&&rows>0)opts.push({a,b,rot,cols,rows,cap:cols*rows,desc:`${cols} в ряд × ${rows} рядов`});
+ }
+ opts.sort((a,b)=>b.cap-a.cap);
+ if(!opts.length)return null;
+ const o=opts[0],sheets=Math.ceil(qty/o.cap);
+ const productArea=qty*w*h,grossArea=sheets*210*297;
+ return {...o,sheets,occupiedPct:Math.max(0,Math.min(100,productArea/grossArea*100)),wastePct:Math.max(0,Math.min(100,(grossArea-productArea)/grossArea*100))};
+}
+function calculate(){
+ const w=num('w'),h=num('h'),qty=Math.max(1,Math.floor(num('qty'))),designs=Math.min(qty,Math.max(1,Math.floor(num('designs'))));
+ const gap=num('gap'),edgeMargin=num('edgeMargin'),sheetPrice=num('sheetPrice'),mountCost=num('mountCost');
+ const mountMarkup=num('mountMarkup'),mountMinimum=num('mountMinimum');
+ const mountSale=mountCost>0?round5(Math.max(mountMinimum,mountCost*(1+mountMarkup/100))):0;
+ $('mountSale').value=mountSale;
+ const complexity=Number($('complexity').value)||1;
+ const tier=getTier(w,h),manual=$('manualPrice').value.trim()!==''?num('manualPrice'):null;
+ const pricingMode=$('pricingMode').value;
+ const disc=defaults.discounts.find(d=>qty>=d.min&&qty<=d.max)||defaults.discounts[defaults.discounts.length-1];
+ const cm2=w*h/100;
+ const areaDisc=getAreaDiscount(cm2*qty);
+ const qtyDiscount=disc.pct/100, areaDiscount=areaDisc.pct/100;
+ const requestedDiscount=1-(1-qtyDiscount)*(1-areaDiscount);
+ const layoutInfo=layout(w,h,gap,qty,edgeMargin);
+ // Material cost uses the area occupied by clichés in a full layout.
+ // Under the selected model, all remaining sheet area is treated as non-returnable loss.
+ const sheetAreaMm2 = 210 * 297;
+ const occupiedPct = layoutInfo && layoutInfo.cap > 0
+   ? Math.min(100, (layoutInfo.cap * w * h) / sheetAreaMm2 * 100)
+   : 0;
+ const lossPct = 100 - occupiedPct;
+ const lossFactor = occupiedPct > 0 ? 100 / occupiedPct : 1;
+ if($('lossFactorDisplay')) $('lossFactorDisplay').value = `K = ${lossFactor.toLocaleString('ru-RU',{maximumFractionDigits:3})} · потери ${lossPct.toLocaleString('ru-RU',{maximumFractionDigits:1})}%`;
+ const cleanMaterialPer = (sheetPrice / sheetAreaMm2) * (w * h);
+ const materialPer = cleanMaterialPer * lossFactor;
+ // Лазер: 30 ₽/час, 120 минут на лист и 30 клише на лист = 2 ₽/клише.
+ // Подготовка уникального макета: 5 минут при ставке 600 ₽/час = 50 ₽.
+ const laserPer=2;
+ const setupPerDesign=50;
+ const setupCost=designs*setupPerDesign;
+ const direct=qty*(materialPer+laserPer)+setupCost;
+ const mountRevenue=mountSale*qty, mountDirect=mountCost*qty;
+ // Накладные расходы: 3000 ₽ при месячной выручке 50000 ₽ = 6% выручки.
+ const overhead=0.06, target=Math.min(0.9,num('targetMargin')/100);
+ let autoBase=tier.price*complexity;
+ if(pricingMode==='markup'){
+    const clicheCostPer=materialPer+laserPer+setupCost/qty;
+    autoBase=clicheCostPer*(1+num('markupPct')/100);
+  } else if(pricingMode==='profit'){
+   const desired=num('desiredProfit');
+   const perUnitDirect=(direct+mountDirect)/qty;
+   const neededTotalUnit=(perUnitDirect+desired)/(1-overhead);
+   const discountFactor=Math.max(0.01,1-requestedDiscount);
+   autoBase=Math.max(0,(neededTotalUnit-mountSale)/discountFactor);
+ }
+ autoBase=round5(Math.max(0,autoBase+num('priceAdjustment')));
+ // В автоматических режимах защищаем целевую маржу даже после объединённой скидки за количество и площадь.
+ // Ручную цену не меняем: для неё калькулятор покажет предупреждение, если маржа мала.
+ const marginDenom=1-overhead-target;
+ if(manual===null && marginDenom>0){
+   const minimumRevenueForTarget=(direct+mountDirect)/marginDenom;
+   const discountFactor=Math.max(0.01,1-requestedDiscount);
+   const minimumAutoBase=Math.max(0,(minimumRevenueForTarget-mountRevenue)/(qty*discountFactor));
+   autoBase=Math.max(autoBase,round5(minimumAutoBase));
+ }
+ const base=round5(manual===null?autoBase:manual);
+ $('priceMode').textContent=manual!==null?'Используется введённая вручную цена. Нажмите «Авто», чтобы очистить её.':`Автоматический режим: ${{market:'розничный прайс',markup:'наценка на себестоимость',profit:'желаемая прибыль'}[pricingMode]}. Корректировка ${num('priceAdjustment')>=0?'+':''}${num('priceAdjustment')} ₽.`;
+ const gross=base*qty;
+ const allowedDenom=1-overhead-target;
+ const totalDirect=direct+mountDirect;
+ // Target margin is checked against the whole order, including mount revenue and cost.
+ const minTotalRevenue=allowedDenom>0?totalDirect/allowedDenom:Infinity;
+ const requiredClicheRevenue=minTotalRevenue-mountRevenue;
+ const maxDiscount=gross>0?Math.max(0,Math.min(1,1-requiredClicheRevenue/gross)):0;
+ const applied=Math.min(requestedDiscount,maxDiscount);
+ const revenue=gross*(1-applied);
+ const rawUnitTotal=(qty>0?revenue/qty:0)+mountSale;
+ const roundedUnitTotal=round5(rawUnitTotal);
+ const totalRevenue=roundedUnitTotal*qty;
+ const roundedClicheRevenue=revenue+(roundedUnitTotal-rawUnitTotal)*qty;
+ const overheadCost=totalRevenue*overhead;
+ const profit=totalRevenue-totalDirect-overheadCost;
+ const margin=totalRevenue>0?profit/totalRevenue:0;
+ const clicheMargin=revenue>0?(revenue-direct-revenue*overhead)/revenue:0;
+ const minUnit=(qty>0 && allowedDenom>0)?minTotalRevenue/qty:Infinity;
+ $('unitPrice').textContent=rub(base);
+ $('priceTier').textContent=manual!==null?'Цена введена вручную':(pricingMode==='market'?tier.label:pricingMode==='markup'?'Цена по наценке на себестоимость':'Цена по желаемой прибыли');
+ $('discount').textContent=(applied*100).toLocaleString('ru-RU',{maximumFractionDigits:1})+'%';
+ $('discountReason').textContent=applied+0.00001<requestedDiscount?`Запрошено ${pct(requestedDiscount)}; ограничено защитой маржи ${num('targetMargin')}%`:`Количество ${disc.pct}% и площадь ${areaDisc.pct}% объединены без сложения`;
+ $('qtyDiscount').textContent=disc.pct+'%';
+ $('qtyDiscountReason').textContent=`Матрица: ${disc.label}`;
+ $('areaDiscount').textContent=areaDisc.pct+'%';
+ $('areaDiscountReason').textContent=`Общая площадь заказа: ${(cm2*qty).toLocaleString('ru-RU',{maximumFractionDigits:2})} см² · ${areaDisc.label}`;
+ $('gross').textContent=rub(gross);
+ $('discountAmount').textContent=rub(gross*applied);
+ $('revenue').textContent=rub(roundedClicheRevenue);
+ $('mountTotal').textContent=rub(mountRevenue);
+ $('heroOrderTotal').textContent=rub(totalRevenue);
+ $('heroUnitPrice').textContent=rub(roundedUnitTotal);
+ $('heroDiscount').textContent=`Клише ${rub(qty>0?revenue/qty:0)} + оснастка ${rub(mountSale)} · итог округлён до 5 ₽`;
+ $('heroUnitCost').textContent=rub(qty>0?(direct+mountDirect)/qty:0);
+ $('heroTotalCost').textContent=rub(totalDirect);
+ $('heroProfit').textContent=rub(profit);
+ $('heroMargin').textContent=pct(margin);
+ $('heroDiscountPct').textContent=pct(applied);
+ $('heroCm2Cost').textContent=rub(cm2>0?materialPer/cm2:0)+' / см²';
+ $('cost').textContent=rub(direct+mountDirect);
+ $('costBreakdown').textContent=`Клише: материал ${rub(materialPer*qty)} (чистая стоимость ${rub(cleanMaterialPer*qty)} × K=${lossFactor.toLocaleString('ru-RU',{maximumFractionDigits:2})}; занято ${occupiedPct.toLocaleString('ru-RU',{maximumFractionDigits:1})}%, потери ${lossPct.toLocaleString('ru-RU',{maximumFractionDigits:1})}%; вместимость ${layoutInfo?layoutInfo.cap:0} шт./лист; на серию потребуется ${layoutInfo?layoutInfo.sheets:0} лист(ов)); лазер ${rub(laserPer*qty)}; подготовка ${designs} макет(ов) ${rub(setupCost)}; оснастка ${rub(mountDirect)}`;
+ $('minUnit').textContent=Number.isFinite(minUnit)?rub(minUnit):'—';
+ if(layoutInfo){
+  $('orientation').textContent=layoutInfo.rot?`${h} × ${w} мм (поворот)`: `${w} × ${h} мм`;
+  $('gridDesc').textContent=`${layoutInfo.cols} в ряд × ${layoutInfo.rows} рядов`;
+  $('capacity').textContent=`${layoutInfo.cap} шт.`;
+  $('sheets').textContent=`Заказ: ${layoutInfo.sheets} лист(ов) · поле ${edgeMargin} мм · зазор ${gap} мм · площадь клише ${layoutInfo.occupiedPct.toLocaleString('ru-RU',{maximumFractionDigits:1})}% · не занято клише ${layoutInfo.wastePct.toLocaleString('ru-RU',{maximumFractionDigits:1})}%`;
+   $('layoutFactor').textContent=lossFactor.toLocaleString('ru-RU',{maximumFractionDigits:3});
+   $('layoutFactorNote').textContent=`K = 100 / ${occupiedPct.toLocaleString('ru-RU',{maximumFractionDigits:1})}% занятой площади`;
+   $('lossImpact').textContent=`+${((lossFactor-1)*100).toLocaleString('ru-RU',{maximumFractionDigits:1})}%`;
+
+ }else{
+  $('orientation').textContent='Не помещается';$('gridDesc').textContent='Проверьте размер';$('capacity').textContent='0 шт.';$('sheets').textContent='Клише больше листа A4';$('layoutFactor').textContent='—';$('layoutFactorNote').textContent='Невозможно рассчитать';$('lossImpact').textContent='—';
+ }
+ const warning=$('warning');
+ if(!layoutInfo){warning.className='status bad';warning.textContent='Размер клише не помещается на лист A4 даже с поворотом. Уменьшите размер или выберите другой формат материала.';}
+ else if(gross<=0){warning.className='status bad';warning.textContent='Цена клише равна нулю. Укажите цену в прайсе или вручную.';}
+ else if(applied+0.00001<requestedDiscount && maxDiscount<=0){warning.className='status bad';warning.textContent=`Даже без скидки цена не обеспечивает целевую маржу ${num('targetMargin')}%. Нужно повысить цену, снизить затраты или пересмотреть целевую маржу. Расчётная минимальная выручка: ${rub(minTotalRevenue)}.`;}
+ else if(applied+0.00001<requestedDiscount){warning.className='status warn';warning.textContent=`Запрошенная общая скидка ${pct(requestedDiscount)} ограничена до ${(applied*100).toLocaleString('ru-RU',{maximumFractionDigits:1})}%, чтобы сохранить целевую маржу ${num('targetMargin')}%.`; }
+ else if(margin+0.00001<target){warning.className='status warn';warning.textContent=`Внимание: фактическая маржа заказа ${pct(margin)} ниже целевой ${num('targetMargin')}%. Минимальная цена готового штампа для этой цели: ${rub(minUnit)} за шт. Проверьте прайс и затраты.`;}
+ else{warning.className='status good';warning.textContent=`Расчёт проходит проверку: маржа ${pct(margin)}, целевая маржа ${num('targetMargin')}%. Общая скидка ${pct(applied)} применена (количество ${disc.pct}%, площадь ${areaDisc.pct}%).`; }
+}
+function saveSettings(){
+ const data={fields:{}};
+ ['w','h','qty','edgeMargin','designs','complexity','mountSale','mountCost','mountMarkup','mountMinimum','sheetPrice','gap','manualPrice','pricingMode','markupPct','desiredProfit','priceAdjustment','targetMargin','mountCost','mountMarkup','mountMinimum'].forEach(id=>data.fields[id]=$(id).value);
+ try{localStorage.setItem('masterstampCalcV3',JSON.stringify(data));$('saveState').textContent='Настройки сохранены в браузере на этом устройстве.';}catch(e){$('saveState').textContent='Браузер не разрешил сохранить настройки; расчёт продолжает работать.';}
+}
+function loadSettings(){
+ try{
+  const raw=localStorage.getItem('masterstampCalcV3');if(!raw)return;
+  const data=JSON.parse(raw);
+  if(data.fields && String(data.fields.targetMargin)==='30') data.fields.targetMargin='40';
+  Object.entries(data.fields||{}).forEach(([id,v])=>{if($(id))$(id).value=v;});
+  if(!$('pricingMode').value)$('pricingMode').value='market';
+  if($('markupPct').value==='')$('markupPct').value=150;
+  if($('desiredProfit').value==='')$('desiredProfit').value=200;
+  if($('priceAdjustment').value==='')$('priceAdjustment').value=0;
+  
+ }catch(e){}
+}
+['w','h','qty','edgeMargin','designs','complexity','mountSale','mountCost','mountMarkup','mountMinimum','sheetPrice','gap','manualPrice','pricingMode','markupPct','desiredProfit','priceAdjustment','targetMargin','mountCost','mountMarkup','mountMinimum'].forEach(id=>$(id).addEventListener('input',calculate));
+$('autoPrice').addEventListener('click',()=>{$('manualPrice').value='';calculate();});
+$('save').addEventListener('click',saveSettings);
+$('reset').addEventListener('click',()=>{try{localStorage.removeItem('masterstampCalcV3')}catch(e){};['w','h','qty','edgeMargin','designs','complexity','mountSale','mountCost','mountMarkup','mountMinimum','sheetPrice','gap','manualPrice','pricingMode','markupPct','desiredProfit','priceAdjustment','targetMargin','mountCost','mountMarkup','mountMinimum'].forEach(id=>{const el=$(id);const def={w:20,h:20,qty:10,edgeMargin:5,designs:1,complexity:1,mountSale:0,mountCost:0,mountMarkup:100,mountMinimum:100,sheetPrice:800,gap:2,manualPrice:'',pricingMode:'market',markupPct:150,desiredProfit:200,priceAdjustment:0,targetMargin:40,};el.value=def[id];});renderTables();calculate();$('saveState').textContent='Настройки сброшены к исходным значениям.';});
+$('print').addEventListener('click',()=>window.print());
+loadSettings();renderTables();
+try { calculate(); } catch (e) {
+  const warning = $('warning');
+  if (warning) {
+    warning.className = 'status bad';
+    warning.textContent = 'Ошибка расчёта: ' + (e && e.message ? e.message : String(e));
+  }
+  console.error(e);
+}
+</script>
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./service-worker.js").catch((error) => {
+        console.error("Не удалось зарегистрировать сервис-воркер:", error);
+      });
+    });
+  }
+</script>
+</body>
+</html>
